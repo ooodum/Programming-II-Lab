@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private bool isWalking = false;
 
+    private float coughArea;
+
     private void Awake() {
         inputAction = new PlayerInput();
 
