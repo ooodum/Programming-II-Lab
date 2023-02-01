@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Rigidbody rb;
     [SerializeField] Camera cam;
     [SerializeField] Animator playerAnimator;
+    [SerializeField] Transform coughSpawnLocation;
+    [SerializeField] GameObject coughHitbox;
 
     [SerializeField] float jumpHeight;
     [SerializeField] float walkSpeed;
@@ -22,7 +24,8 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded = true;
     private bool isWalking = false;
 
-    private float coughArea;
+    private float coughArea, coughSpeed, lifetime;
+    private bool canCough = true;
 
     private void Awake() {
         inputAction = new PlayerInput();
@@ -39,16 +42,22 @@ public class PlayerController : MonoBehaviour
 
         cameraRotation = transform.eulerAngles;
         Cursor.lockState = CursorLockMode.Locked;
+
+        distanceToGround = GetComponent<Collider>().bounds.extents.y;
     }
     private void OnEnable() {
         inputAction.Player.Enable();
     }
     private void Update() {
-        cameraRotation = new Vector3(cameraRotation.x + lookVector.y, cameraRotation.y + lookVector.x, 0);
+        cameraRotation = new Vector3(Mathf.Clamp(cameraRotation.x + lookVector.y,-40,40), cameraRotation.y + lookVector.x, 0);
         transform.eulerAngles = new Vector3(transform.rotation.x, cameraRotation.y, transform.rotation.z);
 
         transform.Translate(Vector3.forward * direction.y * Time.deltaTime * walkSpeed, Space.Self);
         transform.Translate(Vector3.right * direction.x * Time.deltaTime * walkSpeed, Space.Self);
+    }
+
+    private void FixedUpdate() {
+        isGrounded = Physics.Raycast(transform.position, -Vector3.up, distanceToGround + .05f);
     }
 
     private void LateUpdate() {
@@ -62,7 +71,18 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
     }
     private void Cough() {
+        if (!canCough) return;
+        canCough = false;
+        GameObject coughObject = Instantiate(coughHitbox, coughSpawnLocation.position, Quaternion.identity);
+        Cough cough = coughObject.GetComponent<Cough>();
 
+        cough.StartCough(Vector3.forward, 2, 1, 2);
+
+        StartCoroutine(CoughTimer());
     }
 
+    private IEnumerator CoughTimer() {
+        yield return new WaitForSeconds(1f);
+        canCough = true;
+    }
 }
