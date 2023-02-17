@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CharacterStats : MonoBehaviour {
     public int maxHealth = 100;
     public int currentHealth, damage, armor;
     public event System.Action<int, int> OnHealthChange;
+    [SerializeField] TextMeshProUGUI healthText;
 
     private void Awake() {
         currentHealth = maxHealth;
@@ -20,6 +22,7 @@ public class CharacterStats : MonoBehaviour {
         }
 
         print(currentHealth);
+        healthText.text = $"{currentHealth}";
 
         if (currentHealth <= 0) Die(); 
     }
