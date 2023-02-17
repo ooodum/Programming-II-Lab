@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
     private float coughArea, coughSpeed, lifetime;
     private bool canCough = true;
 
+    CharacterStats characterStats;
+
     private void Awake() {
         inputAction = new PlayerInput();
 
@@ -39,6 +41,9 @@ public class PlayerController : MonoBehaviour
         inputAction.Player.Jump.performed += cntxt => Jump();
 
         inputAction.Player.Cough.performed += cntxt => Cough();
+
+        characterStats = GetComponent<CharacterStats>();
+        inputAction.Player.TakeDamage.performed += cntxt => characterStats.TakeDamage(2);
 
         cameraRotation = transform.eulerAngles;
         Cursor.lockState = CursorLockMode.Locked;
