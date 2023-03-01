@@ -5,6 +5,11 @@ using UnityEngine;
 public class Cough : MonoBehaviour{
     private Vector3 direction;
     private float speed, area, lifetime;
+    public enum BulletOwner {
+        Player,
+        Enemy
+    }
+    public BulletOwner bulletOwner;
    private void Start() {
         var mat = GetComponent<Renderer>().material.color;
         mat.a = 0;

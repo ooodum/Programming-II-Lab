@@ -26,8 +26,11 @@ public class PlayerController : MonoBehaviour
 
     private float coughArea, coughSpeed, lifetime;
     private bool canCough = true;
+    [SerializeField] float timeBetweenCough;
 
     CharacterStats characterStats;
+
+    public bool canBeAttacked = true;
 
     private void Awake() {
         inputAction = new PlayerInput();
@@ -80,14 +83,13 @@ public class PlayerController : MonoBehaviour
         canCough = false;
         GameObject coughObject = Instantiate(coughHitbox, coughSpawnLocation.position, Quaternion.identity);
         Cough cough = coughObject.GetComponent<Cough>();
-
+        cough.bulletOwner = global::Cough.BulletOwner.Player;
         cough.StartCough(Vector3.forward, 2, 1, 2);
 
-        StartCoroutine(CoughTimer());
+        Invoke(nameof(CoughTimer), timeBetweenCough);
     }
 
-    private IEnumerator CoughTimer() {
-        yield return new WaitForSeconds(1f);
+    private void CoughTimer() {
         canCough = true;
     }
 }
