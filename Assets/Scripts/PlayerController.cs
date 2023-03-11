@@ -84,12 +84,26 @@ public class PlayerController : MonoBehaviour
         GameObject coughObject = Instantiate(coughHitbox, coughSpawnLocation.position, Quaternion.identity);
         Cough cough = coughObject.GetComponent<Cough>();
         cough.bulletOwner = global::Cough.BulletOwner.Player;
-        cough.StartCough(Vector3.forward, 2, 1, 2);
+        cough.StartCough(transform.forward, 4, 1, 2);
 
         Invoke(nameof(CoughTimer), timeBetweenCough);
     }
 
     private void CoughTimer() {
         canCough = true;
+    }
+
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, -Vector3.up * distanceToGround);
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        Cough cough;
+        other.TryGetComponent<Cough>(out cough);
+
+        if (cough.bulletOwner == global::Cough.BulletOwner.Enemy) {
+            characterStats.TakeDamage(5);
+        }
     }
 }

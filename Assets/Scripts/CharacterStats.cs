@@ -19,19 +19,42 @@ public class CharacterStats : MonoBehaviour {
         damage -= Mathf.Clamp(armor,0,armor);
         currentHealth -= damage;
 
-        if(OnHealthChange != null) {
-            OnHealthChange(maxHealth, currentHealth);
+        if (healthText != null) {
+            if (OnHealthChange != null) {
+                OnHealthChange(maxHealth, currentHealth);
+            }
+
+            print(currentHealth);
+            healthText.text = $"{currentHealth}";
+
+            LeanTween.cancel(healthbar.gameObject);
+            LeanTween.value(healthbar.gameObject, healthbar.fillAmount, (float)currentHealth / (float)maxHealth, 1).setEaseOutBounce().setOnUpdate((v) => {
+                healthbar.fillAmount = v;
+            });
+        }
+        
+        if (currentHealth <= 0) Die(); 
+    }
+
+    public virtual void Heal(int healAmount) {
+        print("MAN");
+        currentHealth += healAmount;
+
+        if (healthText != null) {
+            if (OnHealthChange != null) {
+                OnHealthChange(maxHealth, currentHealth);
+            }
+
+            print(currentHealth);
+            healthText.text = $"{currentHealth}";
+
+            LeanTween.cancel(healthbar.gameObject);
+            LeanTween.value(healthbar.gameObject, healthbar.fillAmount, (float)currentHealth / (float)maxHealth, 1).setEaseOutBounce().setOnUpdate((v) => {
+                healthbar.fillAmount = v;
+            });
         }
 
-        print(currentHealth);
-        healthText.text = $"{currentHealth}";
-
-        LeanTween.cancel(healthbar.gameObject);
-        LeanTween.value(healthbar.gameObject, healthbar.fillAmount, (float)currentHealth / (float)maxHealth, 1).setEaseOutBounce().setOnUpdate((v) => {
-            healthbar.fillAmount = v;
-        });
-
-        if (currentHealth <= 0) Die(); 
+        if (currentHealth <= 0) Die();
     }
 
     public virtual void Die() {

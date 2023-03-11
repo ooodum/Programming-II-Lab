@@ -36,4 +36,6 @@ public class Cough : MonoBehaviour{
 
         Destroy(gameObject, lifetime);
     }
+
+
 }
