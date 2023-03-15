@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
 
     private float distanceToGround;
     private bool isGrounded = true;
-    private bool isWalking = false;
+    //private bool isWalking = false;
 
     private float coughArea, coughSpeed, lifetime;
     private bool canCough = true;

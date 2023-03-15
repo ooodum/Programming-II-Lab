@@ -48,13 +48,11 @@ public class EnemyController : MonoBehaviour {
         if (Physics.Raycast(walkPoint, -transform.up, 1f, groundLayer)) {
             walkPointSet = true;
         }
-        print(walkPointSet);
     }
 
     private void Chase() {
         agent.SetDestination(player.position);
     }
-
 
     private void Cough() {
         agent.SetDestination(transform.position);
@@ -73,6 +71,7 @@ public class EnemyController : MonoBehaviour {
     private void CoughTimer() {
         canCough = true;
     }
+
     private void OnTriggerEnter(Collider other) {
         Cough cough;
         other.TryGetComponent<Cough>(out cough);
@@ -82,12 +81,10 @@ public class EnemyController : MonoBehaviour {
         }
     }
 
-
     private void OnDrawGizmosSelected() {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, sightRange);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
-
 }
