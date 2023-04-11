@@ -6,8 +6,9 @@ using UnityEngine.UI;
 
 public class CharacterStats : MonoBehaviour {
     public int maxHealth = 100;
-    public int currentHealth, damage, armor;
+    public int currentHealth, damage, armor, currentSpeed;
     public event System.Action<int, int> OnHealthChange;
+    public event System.Action<int, int> OnSpeedChange;
     [SerializeField] TextMeshProUGUI healthText;
     [SerializeField] Image healthbar;
 
@@ -55,6 +56,13 @@ public class CharacterStats : MonoBehaviour {
         }
 
         if (currentHealth <= 0) Die();
+    }
+
+    public virtual void Speed(int speedAmount) {
+        int newSpeed =  currentSpeed + speedAmount;
+        if (OnSpeedChange != null) {
+            OnSpeedChange(newSpeed, currentSpeed);
+        }
     }
 
     public virtual void Die() {

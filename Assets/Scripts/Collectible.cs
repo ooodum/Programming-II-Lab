@@ -2,20 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Collectible
-{
+public class Collectible {
     public string name;
 
     public int score;
 
-    public int hpAmount;
+    public int amplitude;
 
-    public Collectible(string name, int hpAmount) {
+    Color color;
+
+    public Collectible(string name, int amplitude, Color color) {
         this.name = name;
-        this.hpAmount = hpAmount;
+        this.amplitude = amplitude;
+        this.color = color;
     }
 
     public void Heal() {
-        PlayerManager.playerManager.player.GetComponent<CharacterStats>().Heal(hpAmount);
+        PlayerManager.playerManager.player.GetComponent<CharacterStats>().Heal(amplitude);
+    }
+
+    public void Speed() {
+        PlayerManager.playerManager.player.GetComponent<CharacterStats>().Speed(amplitude);
     }
 }
